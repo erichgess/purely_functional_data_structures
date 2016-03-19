@@ -75,9 +75,9 @@ module BinarySearchTrees =
   let rec isMember = function
     | (x,Empty) -> false
     | (x, Tree(l, n, r)) ->
-    if x < n then isMember (x, l)   // Experimenting with a new format for if/then.  I like having the condition and it's direct conclusion on the same line
-    elif x > n then isMember(x,r)
-    else true
+      if x < n then isMember (x, l)   // Experimenting with a new format for if/then.  I like having the condition and it's direct conclusion on the same line
+      elif x > n then isMember(x,r)
+      else true
 
   let rec insert (x,s) =
     match s with
