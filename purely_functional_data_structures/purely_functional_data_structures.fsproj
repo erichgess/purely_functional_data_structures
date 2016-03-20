@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <None Include="Chapter2.md" />
     <Compile Include="Chapter2.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
