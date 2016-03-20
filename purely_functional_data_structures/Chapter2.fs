@@ -120,3 +120,58 @@ module BinarySearchTrees =
       if x < n then Tree(insert (x,l), n, r)
       elif x > n then Tree(l, n, insert (x,r))
       else s
+
+  // Problem 2.2
+  let isMember2 (x, t) =
+    let rec check = function
+    | (x, None, Empty) -> false         // if we fator in the pattern matching here, then is there really any benefit?
+                                        // I should probably remove this and do `if prev.IsSome && x = prev.Value` 
+                                        // When I look at the IL (& C# generated from the IL) it does not
+                                        // look like this function really reduces the number of comparisons.
+    | (x, Some prev, Empty) ->  x = prev
+    | (x, prev, Tree(l,n,r)) ->
+      if x < n then check (x, None, l)
+      else check (x, Some n, r)
+
+    check (x, None, t)
+
+  (*
+  When I look at the IL I get
+    - isMember2 -> there are 4 if statements in the while loop
+    - isMember2' -> there are 2 if statements in the while loop.  This one is considerably fewer lines of code too.
+  *)
+  let rec isMember2' (x, prev: 'a option, t) =
+    match (x, prev, t) with
+    | (x, prev, Empty) ->  if prev.IsSome then x = prev.Value else false
+    | (x, prev, Tree(l,n,r)) ->
+      if x < n then isMember2' (x, None, l)
+      else isMember2' (x, Some n, r)
+
+  // Problem 2.3:  In `insert` function if you try to insert an element
+  // which already exists, the function will still make copies of each
+  // element.  Rewrite so that if the element already exists then don't
+  // make any copies.
+  // The problem asks us to use exceptions to do this.  The trick, then
+  // will be to do the copying after the search, rather than before.
+  // However, the current implementation looks like it already does that,
+  // since it will call insert first and then create a Tree.  So all I have
+  // to do is change the final `else` to throw an exception.
+  //
+  // But can I verify that no node is copied until after the call to `insert`
+  // returns? 
+  let rec insert2 (x,s) =
+    match s with
+    | Empty -> Tree (Empty, x, Empty)
+    | Tree(l,n,r) ->
+      if x < n then Tree(insert2 (x,l), n, r)
+      elif x > n then Tree(l, n, insert2 (x,r))
+      else failwith "Element already exists"
+
+  // Problem 2.4.  When I look at the IL to compare insert2 & insert3, insert3
+  // doesn't look much better and may be worse.
+  let rec insert3 (x, prev: 'a option, t) =
+    match t with
+    | Empty -> if prev.IsSome && x = prev.Value then failwith "Element already exists" else Tree (Empty, x, Empty)
+    | Tree(l, n, r) ->
+      if x < n then Tree(insert3 (x, prev, l), n, r)
+      else Tree(l, n, insert3 (x, Some n, r))
