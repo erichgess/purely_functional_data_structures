@@ -83,6 +83,28 @@ module BinarySearchTrees =
     type parameter for Tree.  In F#, I can probably make isMember
     and insert member methods on Tree.  OR add a restriction to
     'a in the definition of Tree.
+
+    This is a good place to think about how we structure our code.
+    The question is: do we add restrictions to Tree or not? To
+    answer that, we need to ask ourselves some other questions
+    - is Tree tightly coupled with the functions or is Tree a type
+    and isMember/insert are basically just some functions that were
+    written to use Tree.  In other words, are the functions intrinsic
+    to how Tree will be used.
+    - another Q?
+
+    Following that, we can also ask ourselves is 'Tree' a good name
+    given how we intend it to function and be used?
+     - if the sorted insertion is inherent to Tree then the naming
+     should reflect that functionality.  In someway, maybe name the
+     module 'BinarySearchTree'
+
+    Is our structure grouping with module sensible given how we expect
+    Tree and the functions to be coupled?
+      - If the functions are built on top of tree they shouldn't be in
+      the same module
+      - If the functions and Tree are tightly coupled then they should
+      be in the same module.
   *)
   let rec isMember = function
     | (x,Empty) -> false
