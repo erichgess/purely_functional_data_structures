@@ -72,6 +72,18 @@ module Lists =
 
 module BinarySearchTrees =
   type Tree<'a> = Empty | Tree of Tree<'a> * 'a * Tree<'a>
+
+  (*
+    One thing to note is the disconnect between Tree<'a>
+    and the isMember/insert functions.  The Type has no
+    restrictions on a' but isMember/insert have a comparison
+    restriction.
+
+    ML has the functor concept to apply restructions on the
+    type parameter for Tree.  In F#, I can probably make isMember
+    and insert member methods on Tree.  OR add a restriction to
+    'a in the definition of Tree.
+  *)
   let rec isMember = function
     | (x,Empty) -> false
     | (x, Tree(l, n, r)) ->
