@@ -23,7 +23,9 @@ module LeftistHeaps =
       then makeT(x, a1, merge b1 h2)
       else makeT(y, a2, merge h1 b2)
 
-  let insert x h = merge (Heap(1, x, Empty, Empty)) h
+  /// I changed the ordering of the parameters here (from x,h to h, x)
+  /// to facilitate using the fold function
+  let insert h x = merge (Heap(1, x, Empty, Empty)) h
 
   let findMin = function
     | Empty -> failwith "Empty Heap"
@@ -32,3 +34,17 @@ module LeftistHeaps =
   let deleteMin = function
     | Empty -> failwith "Empty Heap"
     | Heap(_, x, a, b) -> merge a b
+
+  let fromList l =
+    let rec mergeHeapList = function
+      | [] -> []
+      | a::[] -> [a]
+      | a::b::t -> (merge a b) :: (mergeHeapList t)
+
+    let rec execute = function
+      | [] -> Empty
+      | a::[] -> a
+      | l -> execute (mergeHeapList l)
+
+    let heapList = l |> List.map (insert Empty)
+    execute heapList
