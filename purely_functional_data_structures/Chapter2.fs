@@ -72,6 +72,7 @@ module Lists =
 
 module BinarySearchTrees =
   type Tree<'a> = Empty | Tree of Tree<'a> * 'a * Tree<'a>
+  type BinarySearchTree<'a when 'a: comparison> = Empty | Tree of BinarySearchTree<'a> * 'a * BinarySearchTree<'a>
 
   (*
     One thing to note is the disconnect between Tree<'a>
